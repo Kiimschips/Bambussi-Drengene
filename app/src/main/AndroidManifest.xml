@@ -12,13 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bambussi">
         <activity
+            android:name=".Simple_Battle"
+            android:exported="false" />
+        <activity
             android:name=".NFCReader"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="true">

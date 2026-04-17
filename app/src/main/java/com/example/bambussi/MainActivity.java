@@ -27,6 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void ChangeToNFCReader(View v){
-        startActivity(new Intent(this, NFCReader.class));
+        startActivity(new Intent(this, Simple_Battle.class));
     }
 }
