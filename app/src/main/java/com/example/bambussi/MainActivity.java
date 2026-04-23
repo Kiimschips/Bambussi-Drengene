@@ -48,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
         id = instances;
     }
 
-    public void ChangeToNFCReader() {
-        Intent intent = new Intent(this, NFCReader.class);
-        intent.setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(new Intent(intent));
+
+
+    public void ChangeToNFCReader(View v){
+        startActivity(new Intent(this, Simple_Battle.class));
     }
 
     @Override
