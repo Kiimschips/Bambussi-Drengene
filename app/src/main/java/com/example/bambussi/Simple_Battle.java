@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Simple_Battle extends AppCompatActivity {
 
@@ -27,6 +29,8 @@ public class Simple_Battle extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_simple_battle);
+        ArrayList<Fighter> myTeam = (ArrayList<Fighter>) getIntent().getSerializableExtra("MY_TEAM");
+;
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -42,7 +46,14 @@ public class Simple_Battle extends AppCompatActivity {
         enemyHealthText = findViewById(R.id.enemyHealthText);
 
         // Initialize Game Logic
-        battleManager = new BattleManager();
+        if (myTeam != null && !myTeam.isEmpty()) {
+            battleManager = new BattleManager(myTeam);
+        } else {
+            // Backup hvis noget går galt med overførslen
+            ArrayList<Fighter> defaultTeam = new ArrayList<>();
+            defaultTeam.add(new Fighter("Player 1", 100, 100, 25));
+            battleManager = new BattleManager(defaultTeam);
+        }
 
         // Initial UI state
         updateHealthUI();
@@ -91,11 +102,12 @@ public class Simple_Battle extends AppCompatActivity {
         PLAYER_TURN, ENEMY_TURN, VICTORY, DEFEAT
     }
 
-    public static class Fighter {
+    public static class Fighter implements Serializable {
         private final String name;
         private int health;
         private final int maxHealth;
         private final int attackPower;
+        
 
         public Fighter(String name, int health, int maxHealth, int attackPower) {
             this.name = name;
@@ -120,19 +132,21 @@ public class Simple_Battle extends AppCompatActivity {
             void onLogUpdated(String message);
         }
 
-        private final Fighter player;
+        private final ArrayList<Fighter> playerTeam;
+        private int currentFighterIndex = 0;
+        private Fighter player;
+        public BattleManager(ArrayList<Fighter> team){
+            playerTeam = team;
+            this.player = team.get(0);
+            this.enemy = new Fighter("modstander", 50, 50, 15);
+            currentState = BattleState.PLAYER_TURN;
+            handler = new Handler(Looper.getMainLooper());
+        }
         private final Fighter enemy;
         private BattleState currentState;
         private BattleLogListener listener;
         private final Handler handler;
-
-        public BattleManager() {
-            player = new Fighter("Player 1", 100, 100, 25);
-            enemy = new Fighter("Player 2", 50, 50, 10);
-            currentState = BattleState.PLAYER_TURN;
-            handler = new Handler(Looper.getMainLooper());
-        }
-
+        
         public Fighter getPlayer() { return player; }
         public Fighter getEnemy() { return enemy; }
         public BattleState getCurrentState() { return currentState; }
@@ -160,13 +174,21 @@ public class Simple_Battle extends AppCompatActivity {
             handler.postDelayed(() -> {
                 player.takeDamage(enemy.getAttackPower());
                 log(enemy.getName() + " attacked you for " + enemy.getAttackPower() + " damage!");
-
+                
                 if (!player.isAlive()) {
-                    currentState = BattleState.DEFEAT;
-                    log("Game Over: You died.");
+                    currentFighterIndex++;
+                    if (currentFighterIndex < playerTeam.size()) {
+                        player = playerTeam.get(currentFighterIndex);
+                        log("Din helt faldt! " + player.getName() + " træder ind i kampen!");
+                        currentState = BattleState.PLAYER_TURN;
+                        log("Det er din tur!");
+                    } else {
+                        currentState = BattleState.DEFEAT;
+                        log("Game Over: Hele dit hold er besejret.");
+                    }
                 } else {
                     currentState = BattleState.PLAYER_TURN;
-                    log("It's your turn!");
+                    log("Det er din tur!");
                 }
             }, 1500);
         }
