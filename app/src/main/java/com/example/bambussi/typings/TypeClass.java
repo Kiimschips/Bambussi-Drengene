@@ -1,4 +1,4 @@
-package com.example.bambussi.typingPackage;
+package com.example.bambussi.typings;
 
 import java.util.Arrays;
 

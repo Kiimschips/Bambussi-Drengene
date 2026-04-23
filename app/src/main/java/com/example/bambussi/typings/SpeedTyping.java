@@ -1,10 +1,10 @@
-package com.example.bambussi.typingPackage;
+package com.example.bambussi.typings;
 
-public class IntelligenceTyping extends TypeClass {
-    public String type = "Intelligence";
+public class SpeedTyping extends TypeClass {
+    public String type = "Speed";
 
-    String[] typeWeaknessArray = {"Speed"};
-    String[] typeResistanceArray = {"Power"};
+    String[] typeWeaknessArray = {"Defence"};
+    String[] typeResistanceArray = {"Intelligence"};
 
     @Override
     float getTypeMatchUp(String typing)
