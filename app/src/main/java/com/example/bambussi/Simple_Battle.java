@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -24,6 +25,7 @@ public class Simple_Battle extends AppCompatActivity {
     private TextView playerHealthText;
     private TextView enemyHealthText;
     private Button attackButton;
+    private Button changeFighterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class Simple_Battle extends AppCompatActivity {
         // link Java to XML
         battleLogTextView = findViewById(R.id.battleLogTextView);
         attackButton = findViewById(R.id.attackButton);
+        changeFighterButton = findViewById(R.id.ChangeFighter);
         playerHealthText = findViewById(R.id.playerHealthText);
         enemyHealthText = findViewById(R.id.enemyHealthText);
 
@@ -67,9 +70,10 @@ public class Simple_Battle extends AppCompatActivity {
                 // This updates the HP numbers
                 updateHealthUI();
 
-                // Re-enable the button only if it's your turn (P1)
+                // Re-enable the buttons only if it's your turn (P1)
                 boolean isPlayerTurn = battleManager.getCurrentState() == BattleState.PLAYER_TURN;
                 attackButton.setEnabled(isPlayerTurn);
+                changeFighterButton.setEnabled(isPlayerTurn);
             }
         });
 
@@ -80,8 +84,45 @@ public class Simple_Battle extends AppCompatActivity {
                 battleManager.playerAttack();
                 // Immediately disable to prevent spamming during the enemy's turn
                 attackButton.setEnabled(false);
+                changeFighterButton.setEnabled(false);
             }
         });
+
+        changeFighterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChangeFighterDialog();
+            }
+        });
+    }
+
+
+    private void showChangeFighterDialog() {
+        ArrayList<Fighter> team = battleManager.getPlayerTeam();
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Integer> indices = new ArrayList<>();
+
+        for (int i = 0; i < team.size(); i++) {
+            Fighter f = team.get(i);
+            // Vis kun de andre helte som er i live
+            if (i != battleManager.getCurrentFighterIndex() && f.isAlive()) {
+                names.add(f.getName() + " (HP: " + f.getHealth() + ")");
+                indices.add(i);
+            }
+        }
+
+        if (names.isEmpty()) {
+            battleManager.log("No other fighters are alive...");
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("Choose your fighter (Uses turn)")
+                .setItems(names.toArray(new String[0]), (dialog, which) -> {
+                    battleManager.switchToFighter(indices.get(which));
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
 
@@ -137,7 +178,7 @@ public class Simple_Battle extends AppCompatActivity {
         public BattleManager(ArrayList<Fighter> team){
             playerTeam = team;
             this.player = team.get(0);
-            this.enemy = new Fighter("modstander", 50, 50, 15);
+            this.enemy = new Fighter("Anderdingus", 50, 50, 15);
             currentState = BattleState.PLAYER_TURN;
             handler = new Handler(Looper.getMainLooper());
         }
@@ -149,6 +190,20 @@ public class Simple_Battle extends AppCompatActivity {
         public Fighter getPlayer() { return player; }
         public Fighter getEnemy() { return enemy; }
         public BattleState getCurrentState() { return currentState; }
+        public ArrayList<Fighter> getPlayerTeam() { return playerTeam; }
+        public int getCurrentFighterIndex() { return currentFighterIndex; }
+
+        public void switchToFighter(int index) {
+            if (currentState != BattleState.PLAYER_TURN) return;
+            
+            player = playerTeam.get(index);
+            currentFighterIndex = index;
+            log("You switched to " + player.getName() + "!");
+            
+            // Skift koster en tur
+            currentState = BattleState.ENEMY_TURN;
+            enemyTurn();
+        }
 
         public void setBattleLogListener(BattleLogListener listener) {
             this.listener = listener;
@@ -175,19 +230,28 @@ public class Simple_Battle extends AppCompatActivity {
                 log(enemy.getName() + " attacked you for " + enemy.getAttackPower() + " damage!");
                 
                 if (!player.isAlive()) {
-                    currentFighterIndex++;
-                    if (currentFighterIndex < playerTeam.size()) {
+                    int nextAvailable = -1;
+                    // Find den første helt der stadig er i live
+                    for (int i = 0; i < playerTeam.size(); i++) {
+                        if (playerTeam.get(i).isAlive()) {
+                            nextAvailable = i;
+                            break;
+                        }
+                    }
+
+                    if (nextAvailable != -1) {
+                        currentFighterIndex = nextAvailable;
                         player = playerTeam.get(currentFighterIndex);
-                        log("Din helt faldt! " + player.getName() + " træder ind i kampen!");
+                        log("Your fighter died. " + player.getName() + " The next one enters!");
                         currentState = BattleState.PLAYER_TURN;
-                        log("Det er din tur!");
+                        log("It's your turn!");
                     } else {
                         currentState = BattleState.DEFEAT;
-                        log("Game Over: Hele dit hold er besejret.");
+                        log("Game Over");
                     }
                 } else {
                     currentState = BattleState.PLAYER_TURN;
-                    log("Det er din tur!");
+                    log("its your turn");
                 }
             }, 1500);
         }

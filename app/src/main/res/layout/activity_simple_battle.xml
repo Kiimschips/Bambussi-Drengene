@@ -9,6 +9,15 @@
     android:padding="20dp"
     tools:context=".Simple_Battle">
 
+    <Button
+        android:id="@+id/ChangeFighter"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="4dp"
+        android:text="Change Fighter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="24dp" />
+
     <TextView
         android:id="@+id/enemyHealthText"
         android:layout_width="wrap_content"
@@ -49,9 +58,9 @@
         android:id="@+id/attackButton"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginBottom="80dp"
         android:text="ATTACK"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="166dp" />
+        tools:layout_editor_absoluteX="24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
