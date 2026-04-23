@@ -15,20 +15,22 @@
         <activity
             android:name=".Simple_Battle"
             android:exported="false" />
+
         <activity
             android:name=".NFCReader"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <action android:name="android.nfc.action.NFED_DISCORVERED"/>
 
-                <data android:mimeType="text/plain"/>
-            android:exported="true">
+                <data android:mimeType="text/plain" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
