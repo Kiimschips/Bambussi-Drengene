@@ -24,5 +24,8 @@ public class MainActivity extends AppCompatActivity {
     public void ChangeToNFCReader(){
         startActivity(new Intent(this, Simple_Battle.class));
     }
-}
 
+    public void goToChampSelect(View v) {
+        startActivity(new Intent(this, ChampSelect.class));
+    }
+}

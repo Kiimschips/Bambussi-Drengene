@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bambussi">
         <activity
+            android:name=".ChampSelect"
+            android:exported="false" />
+        <activity
             android:name=".Simple_Battle"
             android:exported="false" />
 
