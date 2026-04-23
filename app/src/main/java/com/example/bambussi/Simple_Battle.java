@@ -3,6 +3,7 @@ package com.example.bambussi;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,8 +31,6 @@ public class Simple_Battle extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_simple_battle);
         ArrayList<Fighter> myTeam = (ArrayList<Fighter>) getIntent().getSerializableExtra("MY_TEAM");
-;
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
