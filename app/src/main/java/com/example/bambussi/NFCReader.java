@@ -18,14 +18,12 @@ import java.nio.charset.StandardCharsets;
 
 public class NFCReader extends AppCompatActivity implements NfcAdapter.ReaderCallback{
     NfcAdapter nfcAdapter;
-    TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfcreader);
 
-        text = (TextView) findViewById(R.id.txtNFCtext);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null){
             Log.d("ERROR", "No NFC reader detected");
