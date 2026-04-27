@@ -29,6 +29,7 @@ public class ChampSelect extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        BattleManager.PlayerTeam.clear();
 
         // Find knapperne
         btnPower = findViewById(R.id.Power);
@@ -47,7 +48,6 @@ public class ChampSelect extends AppCompatActivity {
         btnStart.setOnClickListener(v -> {
             if (BattleManager.PlayerTeam.size() == 3) {
                 Intent intent = new Intent(this, Simple_Battle.class);
-                //intent.putExtra("MY_TEAM", BattleManager.PlayerTeam);
                 Log.d("CHAMPSELECT", "Done");
                 startActivity(intent);
                 finish();
