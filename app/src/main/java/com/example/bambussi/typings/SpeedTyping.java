@@ -7,7 +7,7 @@ public class SpeedTyping extends TypeClass {
     String[] typeResistanceArray = {"Intelligence"};
 
     @Override
-    float getTypeMatchUp(String typing)
+    public float getTypeMatchUp(String typing)
     {
         super.typeWeaknessArray = this.typeWeaknessArray;
         super.typeResistanceArray = this.typeResistanceArray;

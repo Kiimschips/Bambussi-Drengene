@@ -12,6 +12,7 @@ public class TypeClass {
 
     float getTypeMatchUp(String typing)
     {
+
         if (Arrays.asList(typeWeaknessArray).contains(typing))
         {
             totalWeaknessMultiplier *= typeWeaknessMultiplier;

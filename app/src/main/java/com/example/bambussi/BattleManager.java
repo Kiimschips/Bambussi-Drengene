@@ -48,7 +48,7 @@ public class BattleManager {
     public void playerAttack() {
         if (currentState != BattleState.PLAYER_TURN) return;
 
-        currentEnemyFighter.takeDamage(currentPlayerFighter.getAttackPower());
+        currentEnemyFighter.takeDamage(currentPlayerFighter);
         log("You hit the " + currentEnemyFighter.getName() + " for " + currentPlayerFighter.getAttackPower() + "!");
 
         checkWinCondition();
@@ -58,7 +58,7 @@ public class BattleManager {
         log(currentEnemyFighter.getName() + " is preparing to strike...");
 
         handler.postDelayed(() -> {
-            currentPlayerFighter.takeDamage(currentEnemyFighter.getAttackPower());
+            currentPlayerFighter.takeDamage(currentEnemyFighter);
             log(currentEnemyFighter.getName() + " attacked you for " + currentEnemyFighter.getAttackPower() + " damage!");
 
             if (!currentPlayerFighter.isAlive()) {
@@ -80,7 +80,11 @@ public class BattleManager {
     }
 
     private void checkWinCondition() {
-        if (currentEnemyFighter.isAlive()) { enemyTurn(); }
+        if (currentEnemyFighter.isAlive()) {
+            currentState = BattleState.ENEMY_TURN;
+            enemyTurn();
+            return;
+        }
         Log.d("TAG", ""+EnemyTeam);
         for (Fighter enemy: EnemyTeam) {
             if (enemy.isAlive()){

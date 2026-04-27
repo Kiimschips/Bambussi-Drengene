@@ -7,7 +7,7 @@ public class IntelligenceTyping extends TypeClass {
     String[] typeResistanceArray = {"Power"};
 
     @Override
-    float getTypeMatchUp(String typing)
+    public float getTypeMatchUp(String typing)
     {
         super.typeWeaknessArray = this.typeWeaknessArray;
         super.typeResistanceArray = this.typeResistanceArray;
