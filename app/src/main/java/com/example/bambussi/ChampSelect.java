@@ -2,20 +2,21 @@ package com.example.bambussi;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import java.util.ArrayList;
+import com.example.bambussi.typings.DefenceTyping;
+import com.example.bambussi.typings.IntelligenceTyping;
+import com.example.bambussi.typings.PowerTyping;
+import com.example.bambussi.typings.SpeedTyping;
+import com.example.bambussi.typings.TypeClass;
 
 public class ChampSelect extends AppCompatActivity {
-
-    private ArrayList<Simple_Battle.Fighter> selectedTeam = new ArrayList<>();
     private Button btnPower, btnDefence, btnSpeed, btnIntelligent, btnStart;
 
     @Override
@@ -23,12 +24,12 @@ public class ChampSelect extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_champ_select);
-        
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        BattleManager.PlayerTeam.clear();
 
         // Find knapperne
         btnPower = findViewById(R.id.Power);
@@ -38,27 +39,28 @@ public class ChampSelect extends AppCompatActivity {
         btnStart = findViewById(R.id.startBattleBtn);
 
         // Sæt klik-lyttere til karaktervalg
-        btnPower.setOnClickListener(v -> toggleFighter("Power", 100, 30));
-        btnDefence.setOnClickListener(v -> toggleFighter("Defence", 150, 15));
-        btnSpeed.setOnClickListener(v -> toggleFighter("Speed", 80, 25));
-        btnIntelligent.setOnClickListener(v -> toggleFighter("Intelligent", 90, 40));
+        btnPower.setOnClickListener(v -> toggleFighter("Power", 100, 30, new PowerTyping()));
+        btnDefence.setOnClickListener(v -> toggleFighter("Defence", 150, 15, new DefenceTyping()));
+        btnSpeed.setOnClickListener(v -> toggleFighter("Speed", 80, 25, new SpeedTyping()));
+        btnIntelligent.setOnClickListener(v -> toggleFighter("Intelligent", 90, 40, new IntelligenceTyping()));
 
         // Start kamp knappen
         btnStart.setOnClickListener(v -> {
-            if (selectedTeam.size() == 3) {
+            if (BattleManager.PlayerTeam.size() == 3) {
                 Intent intent = new Intent(this, Simple_Battle.class);
-                intent.putExtra("MY_TEAM", selectedTeam);
+                Log.d("CHAMPSELECT", "Done");
                 startActivity(intent);
                 finish();
             }
         });
     }
 
-    private void toggleFighter(String name, int hp, int dmg) {
+    private void toggleFighter(String name, int hp, int dmg, TypeClass type) {
         // Tjek om karakteren allerede er valgt
         int existingIndex = -1;
-        for (int i = 0; i < selectedTeam.size(); i++) {
-            if (selectedTeam.get(i).getName().equals(name)) {
+
+        for (int i = 0; i < BattleManager.PlayerTeam.size(); i++) {
+            if (BattleManager.PlayerTeam.get(i).getName().equals(name)) {
                 existingIndex = i;
                 break;
             }
@@ -66,16 +68,15 @@ public class ChampSelect extends AppCompatActivity {
 
         if (existingIndex != -1) {
             // Fjern hvis den allerede er valgt (fortryd)
-            selectedTeam.remove(existingIndex);
+            BattleManager.PlayerTeam.remove(existingIndex);
         } else {
             // Tilføj hvis der er plads
-            if (selectedTeam.size() < 3) {
-                selectedTeam.add(new Simple_Battle.Fighter(name, hp, hp, dmg));
+            if (BattleManager.PlayerTeam.size() < 3) {
+                BattleManager.PlayerTeam.add(new Fighter(name, hp, dmg, type));
             } else {
                 Toast.makeText(this, "Du kan kun vælge 3 helte!", Toast.LENGTH_SHORT).show();
             }
         }
-
         updateUI();
     }
 
@@ -87,8 +88,8 @@ public class ChampSelect extends AppCompatActivity {
         btnIntelligent.setText("Intelligent");
 
         // Opdater teksten for dem der er valgt med deres rækkefølge
-        for (int i = 0; i < selectedTeam.size(); i++) {
-            String name = selectedTeam.get(i).getName();
+        for (int i = 0; i < BattleManager.PlayerTeam.size(); i++) {
+            String name = BattleManager.PlayerTeam.get(i).getName();
             String statusText = name + " (Nr. " + (i + 1) + ")";
             
             if (name.equals("Power")) btnPower.setText(statusText);
@@ -98,11 +99,11 @@ public class ChampSelect extends AppCompatActivity {
         }
 
         // Aktiver/deaktiver Start-knappen
-        btnStart.setEnabled(selectedTeam.size() == 3);
-        if (selectedTeam.size() == 3) {
+        btnStart.setEnabled(BattleManager.PlayerTeam.size() == 3);
+        if (BattleManager.PlayerTeam.size() == 3) {
             btnStart.setText("START KAMPEN!");
         } else {
-            btnStart.setText("Vælg 3 helte (" + selectedTeam.size() + "/3)");
+            btnStart.setText("Vælg 3 helte (" + BattleManager.PlayerTeam.size() + "/3)");
         }
     }
 }

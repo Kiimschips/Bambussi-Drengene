@@ -3,7 +3,6 @@ package com.example.bambussi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,10 +21,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void ChangeToNFCReader(){
-        startActivity(new Intent(this, Simple_Battle.class));
-    }
-
-    public void goToChampSelect(View v) {
-        startActivity(new Intent(this, ChampSelect.class));
+        startActivity(new Intent(this, NFCReader.class));
     }
 }
