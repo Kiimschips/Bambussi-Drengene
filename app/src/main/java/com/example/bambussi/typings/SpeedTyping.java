@@ -1,4 +1,4 @@
-package com.example.bambussi.typingPackage;
+package com.example.bambussi.typings;
 
 public class SpeedTyping extends TypeClass {
     public String type = "Speed";
@@ -7,7 +7,7 @@ public class SpeedTyping extends TypeClass {
     String[] typeResistanceArray = {"Intelligence"};
 
     @Override
-    float getTypeMatchUp(String typing)
+    public float getTypeMatchUp(String typing)
     {
         super.typeWeaknessArray = this.typeWeaknessArray;
         super.typeResistanceArray = this.typeResistanceArray;

@@ -1,4 +1,4 @@
-package com.example.bambussi.typingPackage;
+package com.example.bambussi.typings;
 
 import java.util.Arrays;
 
@@ -12,6 +12,7 @@ public class TypeClass {
 
     float getTypeMatchUp(String typing)
     {
+
         if (Arrays.asList(typeWeaknessArray).contains(typing))
         {
             totalWeaknessMultiplier *= typeWeaknessMultiplier;

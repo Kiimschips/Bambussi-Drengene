@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
@@ -38,10 +37,6 @@ public class MainActivity extends BaseMusicActivity {
     }
 
     public void ChangeToNFCReader(){
-        startActivity(new Intent(this, Simple_Battle.class));
-    }
-
-    public void goToChampSelect(View v) {
-        startActivity(new Intent(this, ChampSelect.class));
+        startActivity(new Intent(this, NFCReader.class));
     }
 }

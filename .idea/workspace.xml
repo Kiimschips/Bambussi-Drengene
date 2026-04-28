@@ -25,6 +25,11 @@
           <theme>@style/Theme.Bambussi</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/xml/nfc_tech_filter.xml">
+        <config>
+          <theme>@style/Theme.Bambussi</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
@@ -32,17 +37,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b180350-de63-4551-b88d-4635ed7484e8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/BaseMusicActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/raw/bambusi.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/raw/pickakarater.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/ChampSelect.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/ChampSelect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/Simple_Battle.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/Simple_Battle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_champ_select.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_champ_select.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_simple_battle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_simple_battle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/BattleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/BattleManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/Fighter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/Fighter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/typings/DefenceTyping.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/typings/DefenceTyping.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/typings/IntelligenceTyping.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/typings/IntelligenceTyping.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/typings/PowerTyping.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/typings/PowerTyping.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/typings/SpeedTyping.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/typings/SpeedTyping.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/typings/TypeClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/typings/TypeClass.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +59,7 @@
       <entry key="_C:/Users/Bruger/Documents/guinmp2009-master/Bambussi-Drengene" value="3CIxiTiXFl1d5W2hqam4w7LqAhk" />
     </persistenceIdMap>
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=C:\Users\Bruger\.android\avd\Medium_Phone.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=2A281FDH200DQW]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -79,6 +81,14 @@
         </projects_view>
       </state>
     </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="resourceFile" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -112,22 +122,20 @@
     "Android App.NFCReader.executor": "Run",
     "Android App.app.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "kiim",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Bruger/Documents/guinmp2009-master/Bambussi-Drengene/app/src/main/res/raw"
+    "last_opened_file_path": "C:/Users/marcu/Documents/GitHub/Bambussi-Drengene"
   }
 }]]></component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Bruger\Documents\guinmp2009-master\Bambussi-Drengene\app\src\main\res\raw" />
-    </key>
     <key name="android.template.287495494">
       <recent name="com.example.bambussi" />
     </key>
@@ -308,12 +316,12 @@
       <map>
         <entry key="com.example.bambussi">
           <value>
-            <CheckInfo lastCheckTimestamp="1776944641181" />
+            <CheckInfo lastCheckTimestamp="1777214730435" />
           </value>
         </entry>
         <entry key="com.example.bambussi.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1776944641181" />
+            <CheckInfo lastCheckTimestamp="1777214730439" />
           </value>
         </entry>
       </map>
