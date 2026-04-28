@@ -9,6 +9,14 @@
     android:padding="20dp"
     tools:context=".Simple_Battle">
 
+    <Button
+        android:id="@+id/btnMute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mute"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/enemyHealthText"
         android:layout_width="wrap_content"

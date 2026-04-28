@@ -1,5 +1,6 @@
 package com.example.bambussi;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,7 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Simple_Battle extends AppCompatActivity {
+public class Simple_Battle extends BaseMusicActivity {
 
     // UI Elements
     private BattleManager battleManager;
@@ -32,6 +33,9 @@ public class Simple_Battle extends AppCompatActivity {
         setContentView(R.layout.activity_simple_battle);
         ArrayList<Fighter> myTeam = (ArrayList<Fighter>) getIntent().getSerializableExtra("MY_TEAM");
 
+        // Start kamp musik via arv
+        startMusic(R.raw.bambusi);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -43,6 +47,9 @@ public class Simple_Battle extends AppCompatActivity {
         attackButton = findViewById(R.id.attackButton);
         playerHealthText = findViewById(R.id.playerHealthText);
         enemyHealthText = findViewById(R.id.enemyHealthText);
+
+        // Mute knap
+        findViewById(R.id.btnMute).setOnClickListener(v -> toggleMute());
 
         // Initialize Game Logic
         if (myTeam != null && !myTeam.isEmpty()) {
@@ -94,6 +101,7 @@ public class Simple_Battle extends AppCompatActivity {
             enemyHealthText.setText("Enemy HP: " + e.getHealth() + "/" + e.getMaxHealth());
         }
     }
+
 
 
 

@@ -1,6 +1,7 @@
 package com.example.bambussi;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -13,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 
-public class ChampSelect extends AppCompatActivity {
+public class ChampSelect extends BaseMusicActivity {
 
     private ArrayList<Simple_Battle.Fighter> selectedTeam = new ArrayList<>();
     private Button btnPower, btnDefence, btnSpeed, btnIntelligent, btnStart;
@@ -24,6 +25,9 @@ public class ChampSelect extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_champ_select);
         
+        // Start musik via arv
+        startMusic(R.raw.pickakarater);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -36,6 +40,9 @@ public class ChampSelect extends AppCompatActivity {
         btnSpeed = findViewById(R.id.Speed);
         btnIntelligent = findViewById(R.id.Intelligent);
         btnStart = findViewById(R.id.startBattleBtn);
+
+        // Mute knap
+        findViewById(R.id.btnMute).setOnClickListener(v -> toggleMute());
 
         // Sæt klik-lyttere til karaktervalg
         btnPower.setOnClickListener(v -> toggleFighter("Power", 100, 30));
