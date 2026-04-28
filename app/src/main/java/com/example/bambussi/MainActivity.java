@@ -37,6 +37,12 @@ public class MainActivity extends BaseMusicActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startMusic(R.raw.pickakarater);
+    }
+
     public void ChangeToNFCReader(){
         startActivity(new Intent(this, NFCReader.class));
     }
