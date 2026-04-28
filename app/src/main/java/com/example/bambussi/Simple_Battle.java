@@ -12,7 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class Simple_Battle extends AppCompatActivity {
+public class Simple_Battle extends BaseMusicActivity {
 
     // UI Elements
     private BattleManager battleManager;
@@ -26,6 +26,10 @@ public class Simple_Battle extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_simple_battle);
+
+        // 1. Start kampmusikken
+        startMusic(R.raw.bambusi);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -36,6 +40,12 @@ public class Simple_Battle extends AppCompatActivity {
         attackButton = findViewById(R.id.attackButton);
         playerHealthText = findViewById(R.id.playerHealthText);
         enemyHealthText = findViewById(R.id.enemyHealthText);
+
+        // 2. Aktiver Mute-knappen
+        Button btnMute = findViewById(R.id.btnMute);
+        if (btnMute != null) {
+            btnMute.setOnClickListener(v -> toggleMute());
+        }
 
         Log.d("TAG1", "onCreate: ");
         // Initialize Game Logic
