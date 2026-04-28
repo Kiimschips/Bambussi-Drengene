@@ -1,16 +1,22 @@
 package com.example.bambussi;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Simple_Battle extends BaseMusicActivity {
 
@@ -20,6 +26,8 @@ public class Simple_Battle extends BaseMusicActivity {
     private TextView playerHealthText;
     private TextView enemyHealthText;
     private Button attackButton;
+    private Button changeFighterButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,7 @@ public class Simple_Battle extends BaseMusicActivity {
         // link Java to XML
         battleLogTextView = findViewById(R.id.battleLogTextView);
         attackButton = findViewById(R.id.attackButton);
+        changeFighterButton = findViewById(R.id.ChangeFighter);
         playerHealthText = findViewById(R.id.playerHealthText);
         enemyHealthText = findViewById(R.id.enemyHealthText);
 
@@ -74,6 +83,7 @@ public class Simple_Battle extends BaseMusicActivity {
                 // Re-enable the button only if it's your turn (P1)
                 boolean isPlayerTurn = battleManager.getCurrentState() == BattleManager.BattleState.PLAYER_TURN;
                 attackButton.setEnabled(isPlayerTurn);
+                changeFighterButton.setEnabled(isPlayerTurn);
             }
         });
 
@@ -84,8 +94,44 @@ public class Simple_Battle extends BaseMusicActivity {
                 battleManager.playerAttack();
                 // Immediately disable to prevent spamming during the enemy's turn
                 attackButton.setEnabled(false);
+                changeFighterButton.setEnabled(false);
             }
         });
+        changeFighterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChangeFighterDialog();
+            }
+        });
+    }
+    private void showChangeFighterDialog() {
+        ArrayList<Fighter> team = battleManager.PlayerTeam;
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Integer> indices = new ArrayList<>();
+
+        for (int i = 0; i < team.size(); i++) {
+            Fighter f = team.get(i);
+            // Vis kun de andre helte som er i live
+            //battleManager.getCurrentFighter()
+            //i != battleManager.getPlayer &&
+            if (battleManager.getPlayer().isAlive()) {
+                names.add(f.getName() + " (HP: " + f.getCurrentHealth() + ")");
+                indices.add(i);
+            }
+        }
+
+        //if (names.isEmpty()) {
+         //   battleManager.log("No other fighters are alive...");
+          //  return;
+        //}
+
+        new AlertDialog.Builder(this)
+                .setTitle("Choose your fighter (Uses turn)")
+                .setItems(names.toArray(new String[0]), (dialog, which) -> {
+                    battleManager.switchToFighter(indices.get(which));
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     private void updateHealthUI() {

@@ -97,4 +97,16 @@ public class BattleManager {
         currentState = BattleState.VICTORY;
         log("Victory! You defeated the enemy!");
     }
+    public void switchToFighter(int index) {
+        if (currentState != BattleState.PLAYER_TURN) return;
+
+        currentPlayerFighter = PlayerTeam.get(index);
+
+        currentFighterIndex = index;
+        log("You switched to " + currentPlayerFighter.getName() + "!");
+
+        // Skift koster en tur
+        currentState = BattleState.ENEMY_TURN;
+        enemyTurn();
+    }
 }
