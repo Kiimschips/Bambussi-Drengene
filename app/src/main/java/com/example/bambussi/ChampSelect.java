@@ -16,7 +16,7 @@ import com.example.bambussi.typings.PowerTyping;
 import com.example.bambussi.typings.SpeedTyping;
 import com.example.bambussi.typings.TypeClass;
 
-public class ChampSelect extends AppCompatActivity {
+public class ChampSelect extends BaseMusicActivity {
     private Button btnPower, btnDefence, btnSpeed, btnIntelligent, btnStart;
 
     @Override
@@ -24,6 +24,10 @@ public class ChampSelect extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_champ_select);
+
+        // Start musik (fra BaseMusicActivity)
+        startMusic(R.raw.pickakarater);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -37,6 +41,12 @@ public class ChampSelect extends AppCompatActivity {
         btnSpeed = findViewById(R.id.Speed);
         btnIntelligent = findViewById(R.id.Intelligent);
         btnStart = findViewById(R.id.startBattleBtn);
+
+        // Aktiver Mute-knappen
+        Button btnMute = findViewById(R.id.btnMute);
+        if (btnMute != null) {
+            btnMute.setOnClickListener(v -> toggleMute());
+        }
 
         // Sæt klik-lyttere til karaktervalg
         btnPower.setOnClickListener(v -> toggleFighter("Power", 100, 30, new PowerTyping()));

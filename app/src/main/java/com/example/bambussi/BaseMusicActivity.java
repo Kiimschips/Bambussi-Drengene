@@ -5,13 +5,13 @@ import android.media.audiofx.LoudnessEnhancer;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-public abstract class BaseMusicActivity extends AppCompatActivity {
+public class BaseMusicActivity extends AppCompatActivity {
     protected static boolean isMuted = false;
     protected MediaPlayer mediaPlayer;
     private LoudnessEnhancer enhancer;
     private int currentResId;
 
-    protected void startMusic(int resId) {
+    public void startMusic(int resId) {
         currentResId = resId;
         if (isMuted) return;
 
