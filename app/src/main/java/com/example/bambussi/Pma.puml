@@ -1,0 +1,136 @@
+@startuml
+title Bambussi - Class Diagram
+
+package com.example.bambussi {
+    class BaseMusicActivity {
+        # static boolean isMuted
+        # MediaPlayer mediaPlayer
+        + void startMusic(int resId)
+        + void toggleMute()
+    }
+
+    class MainActivity {
+        + void onCreate()
+        + void ChangeToNFCReader()
+        + void goToChampSelect()
+    }
+
+    class ChampSelect {
+        - Button btnPower, btnDefence, btnSpeed, btnIntelligent, btnStart
+        + void onCreate()
+        - void toggleFighter(String, int, int, TypeClass)
+        - void updateUI()
+    }
+
+    class Simple_Battle {
+        - BattleManager battleManager
+        - TextView battleLogTextView
+        + void onCreate()
+        - void updateHealthUI()
+        - void showChangeFighterDialog()
+    }
+
+    class BattleManager {
+        + {static} ArrayList<Fighter> PlayerTeam
+        + {static} ArrayList<Fighter> EnemyTeam
+        - Fighter currentPlayerFighter
+        - Fighter currentEnemyFighter
+        - BattleState currentState
+        + void playerAttack()
+        + void switchToFighter(int index)
+        - void enemyTurn()
+        - void checkWinCondition()
+    }
+
+    class Fighter {
+        - String name
+        - int maxHealth
+        - int currentHealth
+        - int attackPower
+        - TypeClass type
+        + void takeDamage(Fighter attacker)
+        + boolean isAlive()
+    }
+
+
+
+
+
+    BaseMusicActivity <|-- MainActivity
+    BaseMusicActivity <|-- ChampSelect
+    BaseMusicActivity <|-- Simple_Battle
+
+    Simple_Battle o-- BattleManager
+    BattleManager o-- Fighter
+
+
+
+    Fighter o-- com.example.bambussi.typings.TypeClass
+}
+
+package com.example.bambussi.typings {
+    abstract class TypeClass
+    class PowerTyping
+    class DefenceTyping
+    class SpeedTyping
+    class IntelligenceTyping
+
+    TypeClass <|-- PowerTyping
+    TypeClass <|-- DefenceTyping
+    TypeClass <|-- SpeedTyping
+    TypeClass <|-- IntelligenceTyping
+}
+
+@enduml
+
+@startuml
+title Bambussi - Sequence Diagram (Battle Flow)
+
+actor User
+participant MainActivity
+participant ChampSelect
+participant Simple_Battle
+participant BattleManager
+participant Fighter
+
+autonumber
+
+== Startup ==
+User -> MainActivity: Open App
+MainActivity -> MainActivity: startMusic(pickakarater)
+
+== Character Selection ==
+User -> MainActivity: Click "Battle"
+MainActivity -> ChampSelect: Start Activity
+ChampSelect -> BattleManager: Clear PlayerTeam
+
+loop Until 3 Fighters Selected
+    User -> ChampSelect: Select/Deselect Character
+    ChampSelect -> ChampSelect: toggleFighter()
+    ChampSelect -> Fighter: Create Instance
+    ChampSelect -> ChampSelect: updateUI()
+end
+
+User -> ChampSelect: Click "START KAMPEN!"
+ChampSelect -> Simple_Battle: Start Activity
+
+== Battle ==
+Simple_Battle -> Simple_Battle: startMusic(bambusi)
+Simple_Battle -> BattleManager: Initialize(PlayerTeam)
+BattleManager -> BattleManager: Set State to PLAYER_TURN
+Simple_Battle -> Simple_Battle: updateHealthUI()
+
+loop While Fighters are Alive
+    User -> Simple_Battle: Click Attack
+    Simple_Battle -> BattleManager: playerAttack()
+    BattleManager -> Fighter: Apply Damage
+    BattleManager --> Simple_Battle: onLogUpdated()
+    Simple_Battle -> Simple_Battle: updateHealthUI()
+
+    BattleManager -> BattleManager: Enemy Turn (Auto)
+    BattleManager -> Fighter: Apply Damage
+    BattleManager --> Simple_Battle: onLogUpdated()
+    Simple_Battle -> Simple_Battle: updateHealthUI()
+end
+
+@enduml
