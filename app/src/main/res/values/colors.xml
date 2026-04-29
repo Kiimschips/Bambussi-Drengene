@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Appens hovedfarver -->
+    <color name="bamboo_green">#8CCA7F</color>
+    <color name="bamboo_brown">#A0522D</color>
 </resources>

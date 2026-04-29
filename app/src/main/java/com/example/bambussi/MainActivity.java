@@ -3,6 +3,7 @@ package com.example.bambussi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import androidx.activity.EdgeToEdge;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,17 +16,24 @@ public class MainActivity extends BaseMusicActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // Start musik via arv (nu korrekt som denne klasse)
+        // Start musik via arv
         startMusic(R.raw.pickakarater);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             return insets;
         });
 
-        // Mute knap
-        View btnMute = findViewById(R.id.btnMute);
+        // Mute knap (ImageButton)
+        ImageButton btnMute = findViewById(R.id.btnMute);
         if (btnMute != null) {
-            btnMute.setOnClickListener(v -> toggleMute());
+            // Sæt ikon baseret på om der er lyd eller ej
+            btnMute.setImageResource(isMuted ? R.drawable.ic_volume_off : R.drawable.ic_volume_up);
+            
+            btnMute.setOnClickListener(v -> {
+                toggleMute();
+                // Opdater ikonet efter tryk
+                btnMute.setImageResource(isMuted ? R.drawable.ic_volume_off : R.drawable.ic_volume_up);
+            });
         }
 
         // NFC Knappen
@@ -41,6 +49,11 @@ public class MainActivity extends BaseMusicActivity {
     protected void onResume() {
         super.onResume();
         startMusic(R.raw.pickakarater);
+        // Sørg for at ikonet er korrekt når vi vender tilbage til skærmen
+        ImageButton btnMute = findViewById(R.id.btnMute);
+        if (btnMute != null) {
+            btnMute.setImageResource(isMuted ? R.drawable.ic_volume_off : R.drawable.ic_volume_up);
+        }
     }
 
     public void ChangeToNFCReader(){
