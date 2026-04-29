@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,7 @@ public class Simple_Battle extends BaseMusicActivity {
         enemyHealthText = findViewById(R.id.enemyHealthText);
 
         // 2. Aktiver Mute-knappen
-        Button btnMute = findViewById(R.id.btnMute);
+        ImageButton btnMute = findViewById(R.id.btnMute);
         if (btnMute != null) {
             btnMute.setOnClickListener(v -> toggleMute());
         }
