@@ -48,6 +48,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b180350-de63-4551-b88d-4635ed7484e8" name="Changes" comment="">
+<<<<<<< Updated upstream
       <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/defefornt.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/defendback.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/inteligenback.png" afterDir="false" />
@@ -64,6 +65,9 @@
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/Matchmaker.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/Matchmaker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/Simple_Battle.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/bambussi/Simple_Battle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_simple_battle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_simple_battle.xml" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,6 +140,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< Updated upstream
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Android App.NFCReader.executor&quot;: &quot;Run&quot;,
@@ -152,8 +157,26 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Bruger/Documents/guinmp2009-master/Bambussi-Drengene/app/src/main/res/drawable&quot;
+=======
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Android App.NFCReader.executor": "Run",
+    "Android App.app.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "Kiimdesign",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/marcu/Documents/GitHub/Bambussi-Drengene"
+>>>>>>> Stashed changes
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Bruger\Documents\guinmp2009-master\Bambussi-Drengene\app\src\main\res\drawable" />
