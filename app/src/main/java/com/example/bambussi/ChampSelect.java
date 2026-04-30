@@ -7,10 +7,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import com.example.bambussi.typings.DefenceTyping;
 import com.example.bambussi.typings.IntelligenceTyping;
 import com.example.bambussi.typings.PowerTyping;
@@ -26,14 +22,9 @@ public class ChampSelect extends BaseMusicActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_champ_select);
 
-        // Start musik (fra BaseMusicActivity)
+        // Start musik
         startMusic(R.raw.pickakarater);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
         BattleManager.PlayerTeam.clear();
 
         // Find knapperne
@@ -46,28 +37,30 @@ public class ChampSelect extends BaseMusicActivity {
         // Aktiver Mute-knappen
         ImageButton btnMute = findViewById(R.id.btnMute);
         if (btnMute != null) {
-            btnMute.setOnClickListener(v -> toggleMute());
+            btnMute.setImageResource(isMuted ? R.drawable.ic_volume_off : R.drawable.ic_volume_up);
+            btnMute.setOnClickListener(v -> {
+                toggleMute();
+                btnMute.setImageResource(isMuted ? R.drawable.ic_volume_off : R.drawable.ic_volume_up);
+            });
         }
 
-        // Sæt klik-lyttere til karaktervalg
-        btnPower.setOnClickListener(v -> toggleFighter("Power", 100, 30, new PowerTyping()));
-        btnDefence.setOnClickListener(v -> toggleFighter("Defence", 150, 15, new DefenceTyping()));
-        btnSpeed.setOnClickListener(v -> toggleFighter("Speed", 80, 25, new SpeedTyping()));
-        btnIntelligent.setOnClickListener(v -> toggleFighter("Intelligent", 90, 40, new IntelligenceTyping()));
+        // Sæt klik-lyttere til karaktervalg med deres billeder
+        btnPower.setOnClickListener(v -> toggleFighter("Power", 100, 30, new PowerTyping(), R.drawable.powerfront, R.drawable.powerback));
+        btnDefence.setOnClickListener(v -> toggleFighter("Defence", 150, 15, new DefenceTyping(), R.drawable.defefornt, R.drawable.defendback));
+        btnSpeed.setOnClickListener(v -> toggleFighter("Speed", 80, 25, new SpeedTyping(), R.drawable.speedfront, R.drawable.speedback));
+        btnIntelligent.setOnClickListener(v -> toggleFighter("Intelligent", 90, 40, new IntelligenceTyping(), R.drawable.inteligens, R.drawable.inteligenback));
 
         // Start kamp knappen
         btnStart.setOnClickListener(v -> {
             if (BattleManager.PlayerTeam.size() == 3) {
                 Intent intent = new Intent(this, Simple_Battle.class);
-                Log.d("CHAMPSELECT", "Done");
                 startActivity(intent);
                 finish();
             }
         });
     }
 
-    private void toggleFighter(String name, int hp, int dmg, TypeClass type) {
-        // Tjek om karakteren allerede er valgt
+    private void toggleFighter(String name, int hp, int dmg, TypeClass type, int frontImg, int backImg) {
         int existingIndex = -1;
 
         for (int i = 0; i < BattleManager.PlayerTeam.size(); i++) {
@@ -78,27 +71,24 @@ public class ChampSelect extends BaseMusicActivity {
         }
 
         if (existingIndex != -1) {
-            // Fjern hvis den allerede er valgt (fortryd)
             BattleManager.PlayerTeam.remove(existingIndex);
         } else {
-            // Tilføj hvis der er plads
             if (BattleManager.PlayerTeam.size() < 3) {
-                BattleManager.PlayerTeam.add(new Fighter(name, hp, dmg, type));
+                // Nu gemmer vi også billed-ID'erne på helten
+                BattleManager.PlayerTeam.add(new Fighter(name, hp, dmg, type, frontImg, backImg));
             } else {
-                Toast.makeText(this, "Du kan kun vælge 3 helte!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "You can only select 3 fighters!", Toast.LENGTH_SHORT).show();
             }
         }
         updateUI();
     }
 
     private void updateUI() {
-        // Nulstil alle tekster først
         btnPower.setText("Power");
         btnDefence.setText("Defence");
         btnSpeed.setText("Speed");
         btnIntelligent.setText("Intelligent");
 
-        // Opdater teksten for dem der er valgt med deres rækkefølge
         for (int i = 0; i < BattleManager.PlayerTeam.size(); i++) {
             String name = BattleManager.PlayerTeam.get(i).getName();
             String statusText = name + " (Nr. " + (i + 1) + ")";
@@ -109,12 +99,11 @@ public class ChampSelect extends BaseMusicActivity {
             else if (name.equals("Intelligent")) btnIntelligent.setText(statusText);
         }
 
-        // Aktiver/deaktiver Start-knappen
         btnStart.setEnabled(BattleManager.PlayerTeam.size() == 3);
         if (BattleManager.PlayerTeam.size() == 3) {
-            btnStart.setText("START KAMPEN!");
+            btnStart.setText("START BATTLE!");
         } else {
-            btnStart.setText("Vælg 3 helte (" + BattleManager.PlayerTeam.size() + "/3)");
+            btnStart.setText("Select 3 fighters (" + BattleManager.PlayerTeam.size() + "/3)");
         }
     }
 }

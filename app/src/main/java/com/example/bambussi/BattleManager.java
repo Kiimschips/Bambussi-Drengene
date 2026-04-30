@@ -2,9 +2,9 @@ package com.example.bambussi;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-
 import com.example.bambussi.typings.PowerTyping;
+import com.example.bambussi.typings.SpeedTyping;
+import com.example.bambussi.typings.IntelligenceTyping;
 import java.util.ArrayList;
 
 public class BattleManager {
@@ -12,32 +12,44 @@ public class BattleManager {
         void onLogUpdated(String message);
     }
     public enum BattleState {
-        PLAYER_TURN, ENEMY_TURN, VICTORY, DEFEAT
+        PLAYER_TURN, ENEMY_TURN, TRANSITION, VICTORY, DEFEAT
     }
 
     public static ArrayList<Fighter> PlayerTeam = new ArrayList<>();
     private Fighter currentPlayerFighter;
     public static ArrayList<Fighter> EnemyTeam = new ArrayList<>();
     private Fighter currentEnemyFighter;
-    private int currentFighterIndex = 0;
+    
     private BattleState currentState;
     private BattleLogListener listener;
     private final Handler handler;
 
     public BattleManager(){
-        currentPlayerFighter = PlayerTeam.get(0);
-        if (EnemyTeam.isEmpty()){
-            EnemyTeam.add(new Fighter("Power", 100, 30, new PowerTyping()));
-        }
-        currentEnemyFighter = EnemyTeam.get(0);
-        currentState = BattleState.PLAYER_TURN;
         handler = new Handler(Looper.getMainLooper());
+        
+        // 1. Give some default enemies if none exist
+        if (EnemyTeam.isEmpty()){
+            EnemyTeam.add(new Fighter("Power Enemy", 100, 30, new PowerTyping(), R.drawable.powerfront, R.drawable.powerback));
+            EnemyTeam.add(new Fighter("Speed Enemy", 80, 25, new SpeedTyping(), R.drawable.speedfront, R.drawable.speedback));
+            EnemyTeam.add(new Fighter("Intel Enemy", 90, 40, new IntelligenceTyping(), R.drawable.inteligens, R.drawable.inteligenback));
+        }
+
+        // 2. ALWAYS reset health for everyone at start of battle
+        for (Fighter f : PlayerTeam) f.resetHealth();
+        for (Fighter f : EnemyTeam) f.resetHealth();
+
+        // 3. Set initial fighters
+        currentPlayerFighter = PlayerTeam.get(0);
+        currentEnemyFighter = EnemyTeam.get(0);
+        
+        currentState = BattleState.PLAYER_TURN;
     }
+    
     public Fighter getPlayer() { return currentPlayerFighter; }
     public Fighter getEnemy() { return currentEnemyFighter; }
     public BattleState getCurrentState() { return currentState; }
 
-    public void setBattleLogListener(BattleManager.BattleLogListener listener) {
+    public void setBattleLogListener(BattleLogListener listener) {
         this.listener = listener;
     }
 
@@ -49,34 +61,46 @@ public class BattleManager {
         if (currentState != BattleState.PLAYER_TURN) return;
 
         currentEnemyFighter.takeDamage(currentPlayerFighter);
-        log("You hit the " + currentEnemyFighter.getName() + " for " + currentPlayerFighter.getAttackPower() + "!");
+        log("You hit " + currentEnemyFighter.getName() + " and dealt " + (int)currentPlayerFighter.getAttackPower() + " damage!");
 
         checkWinCondition();
     }
 
     private void enemyTurn() {
-        log(currentEnemyFighter.getName() + " is preparing to strike...");
+        if (currentState != BattleState.ENEMY_TURN) return;
+        
+        log(currentEnemyFighter.getName() + " is attacking...");
 
         handler.postDelayed(() -> {
             currentPlayerFighter.takeDamage(currentEnemyFighter);
-            log(currentEnemyFighter.getName() + " attacked you for " + currentEnemyFighter.getAttackPower() + " damage!");
+            log(currentEnemyFighter.getName() + " dealt " + (int)currentEnemyFighter.getAttackPower() + " damage to you!");
 
             if (!currentPlayerFighter.isAlive()) {
-                currentFighterIndex++;
-                if (currentFighterIndex < PlayerTeam.size()) {
-                    currentPlayerFighter = PlayerTeam.get(currentFighterIndex);
-                    log("Din helt faldt! " + currentPlayerFighter.getName() + " træder ind i kampen!");
-                    currentState = BattleState.PLAYER_TURN;
-                    log("Det er din tur!");
-                } else {
-                    currentState = BattleState.DEFEAT;
-                    log("Game Over: Hele dit hold er besejret.");
-                }
+                switchToNextPlayerFighter();
             } else {
                 currentState = BattleState.PLAYER_TURN;
-                log("Det er din tur!");
+                log("It's your turn!");
             }
-        }, 1500);
+        }, 1000);
+    }
+
+    private void switchToNextPlayerFighter() {
+        Fighter next = null;
+        for (Fighter f : PlayerTeam) {
+            if (f.isAlive()) {
+                next = f;
+                break;
+            }
+        }
+
+        if (next != null) {
+            currentPlayerFighter = next;
+            currentState = BattleState.PLAYER_TURN; // SKIFT TUR FØR LOG
+            log("Your fighter fell! " + currentPlayerFighter.getName() + " enters the battle!");
+        } else {
+            currentState = BattleState.DEFEAT;
+            log("Game Over: Your team was defeated!");
+        }
     }
 
     private void checkWinCondition() {
@@ -85,28 +109,41 @@ public class BattleManager {
             enemyTurn();
             return;
         }
-        Log.d("TAG", ""+EnemyTeam);
-        for (Fighter enemy: EnemyTeam) {
-            if (enemy.isAlive()){
-                currentEnemyFighter = enemy;
-                currentState = BattleState.ENEMY_TURN;
-                enemyTurn();
-                return;
+
+        // Enemy died!
+        currentState = BattleState.TRANSITION;
+        log(currentEnemyFighter.getName() + " has been defeated!");
+
+        // Find next living enemy
+        Fighter next = null;
+        for (Fighter e : EnemyTeam) {
+            if (e.isAlive()) {
+                next = e;
+                break;
             }
         }
-        currentState = BattleState.VICTORY;
-        log("Victory! You defeated the enemy!");
+
+        if (next != null) {
+            final Fighter nextEnemy = next;
+            handler.postDelayed(() -> {
+                currentEnemyFighter = nextEnemy;
+                currentState = BattleState.PLAYER_TURN; // SKIFT TUR FØR LOG
+                log("A new opponent: " + currentEnemyFighter.getName() + "!");
+            }, 1000);
+        } else {
+            currentState = BattleState.VICTORY;
+            log("Victory! All enemies defeated!");
+        }
     }
+    
     public void switchToFighter(int index) {
         if (currentState != BattleState.PLAYER_TURN) return;
+        Fighter selected = PlayerTeam.get(index);
+        if (selected == currentPlayerFighter || !selected.isAlive()) return;
 
-        currentPlayerFighter = PlayerTeam.get(index);
-
-        currentFighterIndex = index;
-        log("You switched to " + currentPlayerFighter.getName() + "!");
-
-        // Skift koster en tur
-        currentState = BattleState.ENEMY_TURN;
+        currentState = BattleState.ENEMY_TURN; // LÅS KNAPPER MED DET SAMME
+        currentPlayerFighter = selected;
+        log("Switched to " + currentPlayerFighter.getName());
         enemyTurn();
     }
 }

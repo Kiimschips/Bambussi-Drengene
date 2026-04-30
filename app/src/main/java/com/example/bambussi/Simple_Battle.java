@@ -1,34 +1,32 @@
 package com.example.bambussi;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Simple_Battle extends BaseMusicActivity {
 
-    // UI Elements
     private BattleManager battleManager;
     private TextView battleLogTextView;
     private TextView playerHealthText;
     private TextView enemyHealthText;
     private Button attackButton;
     private Button changeFighterButton;
-
+    
+    private ImageView playerImageView;
+    private ImageView enemyImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +34,6 @@ public class Simple_Battle extends BaseMusicActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_simple_battle);
 
-        // 1. Start kampmusikken
         startMusic(R.raw.bambusi);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -44,104 +41,141 @@ public class Simple_Battle extends BaseMusicActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        // link Java to XML
+
         battleLogTextView = findViewById(R.id.battleLogTextView);
         attackButton = findViewById(R.id.attackButton);
         changeFighterButton = findViewById(R.id.ChangeFighter);
         playerHealthText = findViewById(R.id.playerHealthText);
         enemyHealthText = findViewById(R.id.enemyHealthText);
+        playerImageView = findViewById(R.id.playerImageView);
+        enemyImageView = findViewById(R.id.enemyImageView);
 
-        // 2. Aktiver Mute-knappen
         ImageButton btnMute = findViewById(R.id.btnMute);
         if (btnMute != null) {
-            btnMute.setOnClickListener(v -> toggleMute());
+            btnMute.setImageResource(isMuted ? R.drawable.ic_volume_off : R.drawable.ic_volume_up);
+            btnMute.setOnClickListener(v -> {
+                toggleMute();
+                btnMute.setImageResource(isMuted ? R.drawable.ic_volume_off : R.drawable.ic_volume_up);
+            });
         }
 
-        Log.d("TAG1", "onCreate: ");
-        // Initialize Game Logic
         if (BattleManager.PlayerTeam != null && !BattleManager.PlayerTeam.isEmpty()) {
-            Log.d("TAG2", "onCreate: ");
             battleManager = new BattleManager();
-            Log.d("TAG3", "onCreate: ");
         } else {
-            // Backup hvis noget går galt med overførslen
-            Toast.makeText(this, "No Player Team Found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No fighters selected!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
-        Log.d("TAG4", "onCreate: ");
-        // Initial UI state
-        updateHealthUI();
 
-        // Listen for game events?
+        updateBattleUI();
+
         battleManager.setBattleLogListener(new BattleManager.BattleLogListener() {
             @Override
             public void onLogUpdated(String message) {
-                // This updates the middle text
                 battleLogTextView.setText(message);
+                updateBattleUI();
 
-                // This updates the HP numbers
-                updateHealthUI();
+                // Trigger animation hvis nogen bliver ramt
+                if (message.contains("damage to you")) {
+                    performHitAnimation(playerImageView);
+                } else if (message.contains("You hit")) {
+                    performHitAnimation(enemyImageView);
+                }
 
-                // Re-enable the button only if it's your turn (P1)
-                boolean isPlayerTurn = battleManager.getCurrentState() == BattleManager.BattleState.PLAYER_TURN;
-                attackButton.setEnabled(isPlayerTurn);
-                changeFighterButton.setEnabled(isPlayerTurn);
+                BattleManager.BattleState state = battleManager.getCurrentState();
+                
+                if (state == BattleManager.BattleState.VICTORY || state == BattleManager.BattleState.DEFEAT) {
+                    attackButton.setText("RETURN TO MENU");
+                    attackButton.setEnabled(true);
+                    attackButton.setVisibility(View.VISIBLE);
+                    changeFighterButton.setVisibility(View.GONE);
+                } else {
+                    boolean isPlayerTurn = (state == BattleManager.BattleState.PLAYER_TURN);
+                    attackButton.setEnabled(isPlayerTurn);
+                    changeFighterButton.setEnabled(isPlayerTurn);
+                    attackButton.setText("ATTACK");
+                    changeFighterButton.setVisibility(View.VISIBLE);
+                }
             }
         });
 
-        //  Handle Button Click
-        attackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                battleManager.playerAttack();
-                // Immediately disable to prevent spamming during the enemy's turn
+        attackButton.setOnClickListener(v -> {
+            BattleManager.BattleState state = battleManager.getCurrentState();
+            if (state == BattleManager.BattleState.VICTORY || state == BattleManager.BattleState.DEFEAT) {
+                Intent intent = new Intent(Simple_Battle.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            } else if (state == BattleManager.BattleState.PLAYER_TURN) {
                 attackButton.setEnabled(false);
                 changeFighterButton.setEnabled(false);
+                battleManager.playerAttack();
             }
         });
-        changeFighterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showChangeFighterDialog();
-            }
-        });
+
+        changeFighterButton.setOnClickListener(v -> showChangeFighterDialog());
     }
+
+    // SIMPEL SHAKE ANIMATION
+    private void performHitAnimation(View view) {
+        if (view == null) return;
+        
+        // Ryst til siden (Shake)
+        view.animate()
+            .translationX(20f)
+            .setDuration(50)
+            .withEndAction(() -> view.animate()
+                .translationX(-20f)
+                .setDuration(100)
+                .withEndAction(() -> view.animate()
+                    .translationX(0f)
+                    .setDuration(50)
+                    .start())
+                .start())
+            .start();
+
+        // Blink effekt (Flash)
+        view.setAlpha(0.5f);
+        view.postDelayed(() -> view.setAlpha(1.0f), 150);
+    }
+
     private void showChangeFighterDialog() {
-        ArrayList<Fighter> team = battleManager.PlayerTeam;
+        ArrayList<Fighter> team = BattleManager.PlayerTeam;
         ArrayList<String> names = new ArrayList<>();
         ArrayList<Integer> indices = new ArrayList<>();
 
         for (int i = 0; i < team.size(); i++) {
             Fighter f = team.get(i);
-            // Vis kun de andre helte som er i live
-            //battleManager.getCurrentFighter()
-            //i != battleManager.getPlayer &&
-            if (battleManager.getPlayer().isAlive()) {
-                names.add(f.getName() + " (HP: " + f.getCurrentHealth() + ")");
+            if (f.isAlive()) {
+                names.add(f.getName() + " (HP: " + (int)f.getCurrentHealth() + ")");
                 indices.add(i);
             }
         }
 
-        //if (names.isEmpty()) {
-         //   battleManager.log("No other fighters are alive...");
-          //  return;
-        //}
-
         new AlertDialog.Builder(this)
-                .setTitle("Choose your fighter (Uses turn)")
+                .setTitle("Switch Fighter")
                 .setItems(names.toArray(new String[0]), (dialog, which) -> {
                     battleManager.switchToFighter(indices.get(which));
+                    updateBattleUI();
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
-    private void updateHealthUI() {
-        if (battleManager != null && playerHealthText != null && enemyHealthText != null) {
+    private void updateBattleUI() {
+        if (battleManager != null) {
             Fighter p = battleManager.getPlayer();
             Fighter e = battleManager.getEnemy();
 
-            playerHealthText.setText("Your HP: " + p.getCurrentHealth() + "/" + p.getMaxHealth());
-            enemyHealthText.setText("Enemy HP: " + e.getCurrentHealth() + "/" + e.getMaxHealth());
+            playerHealthText.setText("Your HP: " + (int)p.getCurrentHealth() + "/" + (int)p.getMaxHealth());
+            enemyHealthText.setText("Enemy HP: " + (int)e.getCurrentHealth() + "/" + (int)e.getMaxHealth());
+
+            if (playerImageView != null) {
+                playerImageView.setImageResource(p.getBackImageResId());
+            }
+            if (enemyImageView != null) {
+                enemyImageView.setImageResource(e.getFrontImageResId());
+            }
         }
     }
 }
