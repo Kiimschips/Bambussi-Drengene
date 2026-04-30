@@ -13,26 +13,18 @@ public class Fighter extends TypeClass implements Serializable {
     private final float maxHealth;
     private final int attackPower;
     private final TypeClass typing;
-    private final int frontImageResId;
-    private final int backImageResId;
 
-    public Fighter(String name, int maxHealth, int attackPower, TypeClass type, int frontImageResId, int backImageResId) {
+    public Fighter(String name, int maxHealth, int attackPower, TypeClass type) {
         this.name = name;
         this.currentHealth = maxHealth;
         this.maxHealth = maxHealth;
         this.attackPower = attackPower;
         this.typing = type;
-        this.frontImageResId = frontImageResId;
-        this.backImageResId = backImageResId;
     }
-    
     public String getName() { return name; }
     public float getCurrentHealth() { return currentHealth; }
     public float getMaxHealth() { return maxHealth; }
     public int getAttackPower() { return attackPower; }
-    public int getFrontImageResId() { return frontImageResId; }
-    public int getBackImageResId() { return backImageResId; }
-
     public String getTyping() {
         if (typing.toString().contains("Power")){
             return "Power";
@@ -73,9 +65,5 @@ public class Fighter extends TypeClass implements Serializable {
         float damage = damager.attackPower * CalculateDamageMultiplier(damager);
 
         currentHealth = Math.max(0, currentHealth - damage);
-    }
-
-    public void resetHealth() {
-        this.currentHealth = this.maxHealth;
     }
 }

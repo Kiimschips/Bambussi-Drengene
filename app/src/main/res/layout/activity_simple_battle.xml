@@ -23,17 +23,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- FJENDEN (Øverst) -->
-    <ImageView
-        android:id="@+id/enemyImageView"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enemyHealthText"
-        tools:src="@drawable/powerfront" />
-
     <TextView
         android:id="@+id/enemyHealthText"
         android:layout_width="wrap_content"
@@ -45,41 +34,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="50dp"/>
 
-    <!-- LOG (Midten) -->
     <TextView
         android:id="@+id/battleLogTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Gør dig klar!"
+        android:text="Choose your action!"
         android:textAlignment="center"
-        android:textSize="16sp"
-        android:textStyle="italic"
+        android:textSize="18sp"
         android:textColor="@android:color/black"
-        android:background="#44FFFFFF"
-        android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@id/playerImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enemyImageView" />
-
-    <!-- DIG SELV (Nederst) -->
-    <ImageView
-        android:id="@+id/playerImageView"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@id/playerHealthText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:src="@drawable/powerback" />
+        app:layout_constraintTop_toBottomOf="@id/enemyHealthText" />
 
     <TextView
         android:id="@+id/playerHealthText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="80dp"
         android:text="Your HP: 100/100"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -95,16 +69,19 @@
         android:backgroundTint="#A0522D"
         android:textColor="@android:color/white"
         android:text="ATTACK"
-        app:layout_constraintBottom_toTopOf="@id/ChangeFighter" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="166dp" />
 
     <Button
         android:id="@+id/ChangeFighter"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="60dp"
         android:backgroundTint="#A0522D"
         android:textColor="@android:color/white"
-        android:text="CHANGE FIGHTER"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:text="Change Fighter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

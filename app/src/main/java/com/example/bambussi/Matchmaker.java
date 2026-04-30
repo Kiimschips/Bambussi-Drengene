@@ -41,16 +41,16 @@ public class Matchmaker extends AppCompatActivity {
         for (int fighter : fighters) {
             switch (fighter){
                 case 0:
-                    BattleManager.EnemyTeam.add(new Fighter("Power Enemy", 100, 30, new PowerTyping(), R.drawable.powerfront, R.drawable.powerback));
+                    BattleManager.EnemyTeam.add(new Fighter("Power Enemy", 100, 30, new PowerTyping()));
                     break;
                 case 1:
-                    BattleManager.EnemyTeam.add(new Fighter("Intelligence Enemy", 90, 40, new IntelligenceTyping(), R.drawable.inteligens, R.drawable.inteligenback));
+                    BattleManager.EnemyTeam.add(new Fighter("Intelligence Enemy", 100, 30, new IntelligenceTyping()));
                     break;
                 case 2:
-                    BattleManager.EnemyTeam.add(new Fighter("Speed Enemy", 80, 25, new SpeedTyping(), R.drawable.speedfront, R.drawable.speedback));
+                    BattleManager.EnemyTeam.add(new Fighter("Speed Enemy", 100, 30, new SpeedTyping()));
                     break;
                 case 3:
-                    BattleManager.EnemyTeam.add(new Fighter("Defence Enemy", 150, 15, new DefenceTyping(), R.drawable.defefornt, R.drawable.defendback));
+                    BattleManager.EnemyTeam.add(new Fighter("Defence Enemy", 100, 30, new DefenceTyping()));
                     break;
             }
         }
