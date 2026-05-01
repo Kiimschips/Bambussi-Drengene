@@ -50,10 +50,10 @@ public class ChampSelect extends BaseMusicActivity {
         }
 
         // Sæt klik-lyttere til karaktervalg
-        btnPower.setOnClickListener(v -> toggleFighter("Power", 100, 30, new PowerTyping()));
-        btnDefence.setOnClickListener(v -> toggleFighter("Defence", 150, 15, new DefenceTyping()));
-        btnSpeed.setOnClickListener(v -> toggleFighter("Speed", 80, 25, new SpeedTyping()));
-        btnIntelligent.setOnClickListener(v -> toggleFighter("Intelligent", 90, 40, new IntelligenceTyping()));
+        btnPower.setOnClickListener(v -> toggleFighter("Power"));
+        btnDefence.setOnClickListener(v -> toggleFighter("Defence"));
+        btnSpeed.setOnClickListener(v -> toggleFighter("Speed"));
+        btnIntelligent.setOnClickListener(v -> toggleFighter("Intelligent"));
 
         // Start kamp knappen
         btnStart.setOnClickListener(v -> {
@@ -66,12 +66,12 @@ public class ChampSelect extends BaseMusicActivity {
         });
     }
 
-    private void toggleFighter(String name, int hp, int dmg, TypeClass type) {
+    private void toggleFighter(String type) {
         // Tjek om karakteren allerede er valgt
         int existingIndex = -1;
 
         for (int i = 0; i < BattleManager.PlayerTeam.size(); i++) {
-            if (BattleManager.PlayerTeam.get(i).getName().equals(name)) {
+            if (BattleManager.PlayerTeam.get(i).getName().equals(type)) {
                 existingIndex = i;
                 break;
             }
@@ -83,7 +83,20 @@ public class ChampSelect extends BaseMusicActivity {
         } else {
             // Tilføj hvis der er plads
             if (BattleManager.PlayerTeam.size() < 3) {
-                BattleManager.PlayerTeam.add(new Fighter(name, hp, dmg, type));
+                switch (type) {
+                    case "Power":
+                        BattleManager.PlayerTeam.add(Fighter.createPower("Power"));
+                        break;
+                    case "Defence":
+                        BattleManager.PlayerTeam.add(Fighter.createDefence("Defence"));
+                        break;
+                    case "Speed":
+                        BattleManager.PlayerTeam.add(Fighter.createSpeed("Speed"));
+                        break;
+                    case "Intelligent":
+                        BattleManager.PlayerTeam.add(Fighter.createIntelligence("Intelligent"));
+                        break;
+                }
             } else {
                 Toast.makeText(this, "Du kan kun vælge 3 helte!", Toast.LENGTH_SHORT).show();
             }
@@ -112,9 +125,9 @@ public class ChampSelect extends BaseMusicActivity {
         // Aktiver/deaktiver Start-knappen
         btnStart.setEnabled(BattleManager.PlayerTeam.size() == 3);
         if (BattleManager.PlayerTeam.size() == 3) {
-            btnStart.setText("START KAMPEN!");
+            btnStart.setText("START Fight!");
         } else {
-            btnStart.setText("Vælg 3 helte (" + BattleManager.PlayerTeam.size() + "/3)");
+            btnStart.setText("Choose 3 Heroes(" + BattleManager.PlayerTeam.size() + "/3)");
         }
     }
 }

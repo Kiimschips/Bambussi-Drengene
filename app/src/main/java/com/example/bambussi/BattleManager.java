@@ -29,9 +29,9 @@ public class BattleManager {
     public BattleManager(){
         currentPlayerFighter = PlayerTeam.get(0);
         if (EnemyTeam.isEmpty()){
-            EnemyTeam.add(new Fighter("Power Enemy", 100, 30, new PowerTyping()));
-            EnemyTeam.add(new Fighter("Speed Enemy", 80, 25, new SpeedTyping()));
-            EnemyTeam.add(new Fighter("Defence Enemy", 150, 15, new DefenceTyping()));
+            EnemyTeam.add(Fighter.createPower("Power Enemy"));
+            EnemyTeam.add(Fighter.createSpeed("Speed Enemy"));
+            EnemyTeam.add(Fighter.createDefence("Defence Enemy"));
         }
         currentEnemyFighter = EnemyTeam.get(0);
         currentState = BattleState.PLAYER_TURN;
@@ -66,15 +66,24 @@ public class BattleManager {
             log(currentEnemyFighter.getName() + " attacked you for " + currentEnemyFighter.getAttackPower() + " damage!");
 
             if (!currentPlayerFighter.isAlive()) {
-                currentFighterIndex++;
-                if (currentFighterIndex < PlayerTeam.size()) {
-                    currentPlayerFighter = PlayerTeam.get(currentFighterIndex);
-                    log("your hero has fallen! " + currentPlayerFighter.getName() + " træder ind i kampen!");
+                // Led efter en hvilken som helst levende helt
+                boolean foundNewFighter = false;
+                for (int i = 0; i < PlayerTeam.size(); i++) {
+                    if (PlayerTeam.get(i).isAlive()) {
+                        currentPlayerFighter = PlayerTeam.get(i);
+                        currentFighterIndex = i;
+                        foundNewFighter = true;
+                        break;
+                    }
+                }
+
+                if (foundNewFighter) {
+                    log("your hero has fallen! " + currentPlayerFighter.getName() + " Is fighting!");
                     currentState = BattleState.PLAYER_TURN;
                     log("it is your turn!");
                 } else {
                     currentState = BattleState.DEFEAT;
-                    log("Game Over: you have been DEFEATED!!.");
+                    log("Game Over: All your heroes have been defeated!");
                 }
             } else {
                 currentState = BattleState.PLAYER_TURN;

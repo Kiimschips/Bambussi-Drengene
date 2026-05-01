@@ -66,4 +66,21 @@ public class Fighter extends TypeClass implements Serializable {
 
         currentHealth = Math.max(0, currentHealth - damage);
     }
+
+    // Statiske genveje til at oprette figurer med standard stats
+    public static Fighter createPower(String name) {
+        return new Fighter(name, 100, 30, new PowerTyping());
+    }
+
+    public static Fighter createDefence(String name) {
+        return new Fighter(name, 150, 15, new DefenceTyping());
+    }
+
+    public static Fighter createSpeed(String name) {
+        return new Fighter(name, 80, 25, new SpeedTyping());
+    }
+
+    public static Fighter createIntelligence(String name) {
+        return new Fighter(name, 90, 40, new IntelligenceTyping());
+    }
 }

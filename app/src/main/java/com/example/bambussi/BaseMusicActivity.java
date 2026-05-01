@@ -19,12 +19,12 @@ public class BaseMusicActivity extends AppCompatActivity {
 
         mediaPlayer = MediaPlayer.create(this, resId);
         if (mediaPlayer != null) {
-            mediaPlayer.setVolume(1.0f, 1.0f);
+            mediaPlayer.setVolume(0.9f, 0.9f);
             
             // Tilføj lyd-boost (Loudness Enhancer)
             try {
                 enhancer = new LoudnessEnhancer(mediaPlayer.getAudioSessionId());
-                enhancer.setTargetGain(2000); // Giver et kraftigt boost
+                enhancer.setTargetGain(1000); // Giver et kraftigt boost
                 enhancer.setEnabled(true);
             } catch (Exception e) {
                 e.printStackTrace();
