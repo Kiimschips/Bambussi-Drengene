@@ -7,13 +7,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
+    android:background="#8CCA7F"
     tools:context=".Simple_Battle">
 
-    <Button
+    <ImageButton
         android:id="@+id/btnMute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mute"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Mute toggle"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_volume_up"
+        app:tint="#A0522D"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,10 +30,22 @@
         android:text="Enemy HP: 50/50"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="50dp"/>
+
+    <ImageView
+        android:id="@+id/enemyImageView"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toBottomOf="@id/enemyHealthText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        tools:src="@drawable/powerfront" />
 
     <TextView
         android:id="@+id/battleLogTextView"
@@ -36,10 +54,22 @@
         android:text="Choose your action!"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/playerHealthText"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@id/playerImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enemyHealthText" />
+        app:layout_constraintTop_toBottomOf="@id/enemyImageView" />
+
+    <ImageView
+        android:id="@+id/playerImageView"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@id/playerHealthText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="8dp"
+        tools:src="@drawable/powerback" />
 
     <TextView
         android:id="@+id/playerHealthText"
@@ -49,6 +79,7 @@
         android:text="Your HP: 100/100"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@id/attackButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -57,6 +88,8 @@
         android:id="@+id/attackButton"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:backgroundTint="#A0522D"
+        android:textColor="@android:color/white"
         android:text="ATTACK"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="16dp"
@@ -67,9 +100,21 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginBottom="60dp"
+        android:backgroundTint="#A0522D"
+        android:textColor="@android:color/white"
         android:text="Change Fighter"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="20dp" />
 
+    <Button
+        android:id="@+id/returnToMainButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:backgroundTint="#4CAF50"
+        android:textColor="@android:color/white"
+        android:text="RETURN TO MAIN MENU"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

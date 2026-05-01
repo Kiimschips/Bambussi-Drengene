@@ -5,6 +5,8 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.example.bambussi.typings.PowerTyping;
+import com.example.bambussi.typings.SpeedTyping;
+import com.example.bambussi.typings.DefenceTyping;
 import java.util.ArrayList;
 
 public class BattleManager {
@@ -12,7 +14,7 @@ public class BattleManager {
         void onLogUpdated(String message);
     }
     public enum BattleState {
-        PLAYER_TURN, ENEMY_TURN, VICTORY, DEFEAT
+        PLAYER_TURN, ENEMY_TURN, TRANSITION, VICTORY, DEFEAT
     }
 
     public static ArrayList<Fighter> PlayerTeam = new ArrayList<>();
@@ -27,7 +29,9 @@ public class BattleManager {
     public BattleManager(){
         currentPlayerFighter = PlayerTeam.get(0);
         if (EnemyTeam.isEmpty()){
-            EnemyTeam.add(new Fighter("Power", 100, 30, new PowerTyping()));
+            EnemyTeam.add(new Fighter("Power Enemy", 100, 30, new PowerTyping()));
+            EnemyTeam.add(new Fighter("Speed Enemy", 80, 25, new SpeedTyping()));
+            EnemyTeam.add(new Fighter("Defence Enemy", 150, 15, new DefenceTyping()));
         }
         currentEnemyFighter = EnemyTeam.get(0);
         currentState = BattleState.PLAYER_TURN;
@@ -65,16 +69,16 @@ public class BattleManager {
                 currentFighterIndex++;
                 if (currentFighterIndex < PlayerTeam.size()) {
                     currentPlayerFighter = PlayerTeam.get(currentFighterIndex);
-                    log("Din helt faldt! " + currentPlayerFighter.getName() + " træder ind i kampen!");
+                    log("your hero has fallen! " + currentPlayerFighter.getName() + " træder ind i kampen!");
                     currentState = BattleState.PLAYER_TURN;
-                    log("Det er din tur!");
+                    log("it is your turn!");
                 } else {
                     currentState = BattleState.DEFEAT;
-                    log("Game Over: Hele dit hold er besejret.");
+                    log("Game Over: you have been DEFEATED!!.");
                 }
             } else {
                 currentState = BattleState.PLAYER_TURN;
-                log("Det er din tur!");
+                log("it is your turn!");
             }
         }, 1500);
     }
@@ -89,8 +93,12 @@ public class BattleManager {
         for (Fighter enemy: EnemyTeam) {
             if (enemy.isAlive()){
                 currentEnemyFighter = enemy;
-                currentState = BattleState.ENEMY_TURN;
-                enemyTurn();
+                log("A new enemy is approaching " + currentEnemyFighter.getName() + "!");
+                currentState = BattleState.TRANSITION;
+                handler.postDelayed(() -> {
+                            currentState = BattleState.ENEMY_TURN;
+                            enemyTurn();
+                },1000);
                 return;
             }
         }

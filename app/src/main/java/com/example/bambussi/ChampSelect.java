@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,7 +44,7 @@ public class ChampSelect extends BaseMusicActivity {
         btnStart = findViewById(R.id.startBattleBtn);
 
         // Aktiver Mute-knappen
-        Button btnMute = findViewById(R.id.btnMute);
+        ImageButton btnMute = findViewById(R.id.btnMute);
         if (btnMute != null) {
             btnMute.setOnClickListener(v -> toggleMute());
         }

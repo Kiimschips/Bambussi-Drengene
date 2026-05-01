@@ -5,37 +5,100 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#8CCA7F"
     tools:context=".MainActivity">
 
-    <Button
+    <!-- Bambus i baggrunden -->
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="284dp"
+        android:layout_height="262dp"
+        android:layout_marginBottom="60dp"
+        android:background="#8CCA7F"
+        android:scaleX="-1"
+        android:translationX="60dp"
+        android:translationY="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/nybambus" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="284dp"
+        android:layout_height="262dp"
+        android:layout_marginBottom="60dp"
+        android:background="#8CCA7F"
+        android:translationX="-60dp"
+        android:translationY="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/nybambus" />
+
+    <ImageButton
         android:id="@+id/btnMute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Mute"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Mute toggle"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_volume_up"
+        app:tint="#A0522D"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnBattle"
-        android:layout_width="168dp"
-        android:layout_height="92dp"
-        android:layout_marginTop="100dp"
-        android:text="NFC"
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="289dp"
+        android:layout_height="324dp"
+        android:layout_margin="32dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/plsvirk"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnMute" />
 
-    <Button
-        android:id="@+id/btn_to_champ_select"
-        android:layout_width="200dp"
-        android:layout_height="92dp"
-        android:layout_marginTop="24dp"
-        android:onClick="goToChampSelect"
-        android:text="Vælg Helte &amp; Kæmp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/buttonCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnBattle" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <Button
+                android:id="@+id/btnBattle"
+                android:layout_width="200dp"
+                android:layout_height="70dp"
+                android:layout_marginBottom="12dp"
+                android:backgroundTint="#A0522D"
+                android:text="Start Your Battle "
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btn_to_champ_select"
+                android:layout_width="200dp"
+                android:layout_height="70dp"
+                android:backgroundTint="#A0522D"
+                android:onClick="goToChampSelect"
+                android:text="Choose Your Heroes "
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
